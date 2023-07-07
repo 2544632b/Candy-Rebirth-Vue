@@ -1,10 +1,10 @@
 ﻿# Candy:Rebirth(Vue)
 
-重制版，直接用Vue重写。
+A vue implementation of Candy:Rebirth.
 
-Is not completely, trying to add the json fetch from backend.
+Is not completely, trying to add more features.
 
-以下为原始MarkDown内容。
+This is origin content below:
 
 ---------------------------------------------------------------------------------------------------------------------------------
 
