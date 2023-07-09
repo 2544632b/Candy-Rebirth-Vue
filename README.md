@@ -4,7 +4,7 @@ A vue implementation of Candy:Rebirth.
 
 Is not completely, trying to add more features.
 
-![Candy-Rebirth](https://github.com/2544632b/Candy-Rebirth-Vue/blob/main/screenshot.png, "Candy-Rebirth")
+![Candy-Rebirth](https://github.com/2544632b/Candy-Rebirth-Vue/blob/main/screenshot.png "Candy-Rebirth")
 
 This is origin content below:
 
