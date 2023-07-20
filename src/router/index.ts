@@ -19,13 +19,13 @@ const router = createRouter({
             path: '/logout',
             name: 'logout',
             component: () => {
-                axios.get("http://localhost:10000/oauth/un-authorize", {
+                axios.get("http://example.com/oauth/un-authorize", {
                     Headers: {
                         "X-Access-Token": VueCookies.get("SESSIONID"),
                     }
                 });
 
-               cookie.remove("SESSIONID")
+               VueCookies.remove("SESSIONID")
                 window.location.href = "/";
             },
             meta: {
