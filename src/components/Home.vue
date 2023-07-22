@@ -20,7 +20,7 @@
             </div>
         </div>
     </div>
-    <div id="archive" class="screen archive move-show" :class="{'move-animation-down-out': isMainUnActive.isActive}"> <!--控制down out，还有up in-->
+    <div id="archive" class="screen archive move-show" :class="{'move-animation-down-out': isMainUnActive.isActive}">
         <div class="archive-container" ref="container" @scroll="handleScroll">
             <div class="author-info right-in-animation" ref="x_profile" v-if="profile">
                 <img class="avatar" src="../assets/223922884aeedb45bf77b249f183b5f3_8624852438576176182.jpg" alt="yanqing" width="100" height="100">
@@ -44,7 +44,9 @@
                         <!--With photo-->
                         <div class="article-with-preview right-in-animation" :style="{'animation-duration':''+(default_num+=0.1)+'s'}">
                             <div class="cover" @click="showArticle(t.url)">
-                                <div class="cover-image" :style="{'background-image':'url('+t.photo+')'}"><div class="title">{{ t.title }}</div></div>
+                                <div class="cover-image" :style="{'background-image':'url('+t.photo+')'}">
+                                    <div class="title">{{ t.title }}</div>
+                                </div>
                             </div>
                             <div class="content" @click="showArticle(t.url)">
                                 <div class="text">
@@ -209,7 +211,6 @@
             const showArticle = (url: string) => {
                 axios.get(url)
 				.then((response) => {
-                    console.log("1")
 					article.value = response.data;
                     isMainUnActive.isActive = true;
 				})
@@ -217,10 +218,6 @@
 					console.log("无法拉取到文章 T_T")
 					console.error(error.data)
 				})
-            }
-
-            const hideArticle = () => {
-
             }
 
             return {
