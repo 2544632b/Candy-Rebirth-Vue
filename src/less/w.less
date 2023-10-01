@@ -820,6 +820,14 @@ body {
             }
         }
 
+        figure {
+            text-align: center;
+            figcaption {
+                color: #898989;
+                font-size: 0.3em;
+            }
+        }
+
         blockquote {
             color: #666;
             border-left: 3px solid #3b99f5;
@@ -874,13 +882,18 @@ body {
         }
     }
 
-    .content *::selection {
-        padding: 10px 0 20px;
-        color: #fafafa;
-        background: #5f9ea0;
-        font-size: 0.95em;
-        line-height: 1.8;
+    .description {
+        padding: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+        color: #898989;
+        font-size: 0.3em;
     }
+}
+
+.page-wrapper *::selection {
+    color: #fafafa;
+    background: #5f9ea0;
 }
 
 /* 评论样式 */

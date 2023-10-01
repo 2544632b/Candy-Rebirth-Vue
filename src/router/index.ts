@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import VueCookies from 'vue-cookies';
+import NProgress from 'nprogress';
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios from 'axios';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+    NProgress.start();
     const Session = VueCookies.get("SESSIONID");
     if (to.meta.requireAuth === false) {
         if (!Session) {

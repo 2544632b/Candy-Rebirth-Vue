@@ -3,7 +3,7 @@
     <div class="notify-container"></div>
     <div class="menu">
         <div class="group">
-            <a class="item mdi mdi-arrow-left hidden" id="back" @click=""></a>
+            <a class="item mdi mdi-arrow-up hidden" @click=""></a>
             <div class="drop-down">
                 <span class="item mdi mdi-format-annotation-plus" @click=""></span>
                 <span class="item mdi mdi-share-variant"></span>
@@ -21,8 +21,8 @@
         </div>
     </div>
     <div id="archive" class="screen archive move-show" :class="{'move-animation-down-out': isMainUnActive.isActive}">
-        <div class="archive-container" ref="container" @scroll="handleScroll">
-            <div class="author-info right-in-animation" ref="x_profile" v-if="profile">
+        <div class="archive-container" ref="container" @scroll="handleScroll" :style="{'overflow-x': (isMainUnActive.isActive ? 'hidden' : 'scroll')}">
+            <div class="author-info right-in-animation" ref="profile_window" v-if="profile">
                 <img class="avatar" src="../assets/223922884aeedb45bf77b249f183b5f3_8624852438576176182.jpg" alt="yanqing" width="100" height="100">
                 <div class="name">{{ profile.profile_name }}</div>
                 <div class="desc">{{ profile.blog_description }}</div>
@@ -44,9 +44,7 @@
                         <!--With photo-->
                         <div class="article-with-preview right-in-animation" :style="{'animation-duration':''+(default_num+=0.1)+'s'}">
                             <div class="cover" @click="showArticle(t.url)">
-                                <div class="cover-image" :style="{'background-image':'url('+t.photo+')'}">
-                                    <div class="title">{{ t.title }}</div>
-                                </div>
+                                <div class="cover-image" :style="{'background-image':'url('+t.photo+')'}"><div class="title">{{ t.title }}</div></div>
                             </div>
                             <div class="content" @click="showArticle(t.url)">
                                 <div class="text">
@@ -84,7 +82,7 @@
         </div>
     </div>
     <template v-if="article">
-        <div id="page" class="screen page" :class="{'move-animation-down-in': isMainUnActive.isActive, 'move-show': isMainUnActive.isActive}" style="overflow-y: scroll;" ref="page">
+        <div id="page" class="screen page" :class="{'move-animation-down-in': isMainUnActive.isActive, 'move-show': isMainUnActive.isActive}" :style="{'overflow-y': (pageScroll.isActive ? 'scroll' : 'hidden')}" ref="page">
             <div class="page-container" >
                 <div class="page-wrapper">
                     <template v-if="!article.photo">
@@ -116,7 +114,6 @@
                     </div>
                     <!--
                     -->
-                    <div class="text-info"><span class="mdi mdi-close">评论系统还未准备好~</span></div>
                 </div>
             </div>
         </div>
@@ -143,8 +140,17 @@
 </style>
 <script lang="ts" name="XzjLvu87Fq">
     import { defineComponent, reactive, ref, onMounted, onUnmounted, onBeforeUnmount } from 'vue';
-    import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+    import axios from 'axios';
     import VueCookies from 'vue-cookies';
+    import NProgress from 'nprogress';
+
+    /**
+     * 
+     * @package Candy:Rebirth(Vue)
+     * @author 2544632b
+     * @version 1.7.1
+     * @link https://github.com/2544632b/Candy-Rebirth-Vue
+     */
 
     interface FormState {
         searchKey: string;
@@ -152,6 +158,12 @@
 
     export default defineComponent({
         setup() {
+            document.addEventListener("readystatechange", () => {
+				if(document.readyState === 'complete') {
+					NProgress.done();
+				}
+			});
+
             const formState = reactive<FormState>({
                 searchKey: ''
             });
@@ -185,7 +197,7 @@
             // From https://github.com/Archeb/Candy-Rebirth/blob/master/js/m.js (m.js:4)
             // 从0开始，到300px完全消失
             const container = ref('');
-            const x_profile = ref('');
+            const profile_window = ref('');
             const handleScroll = (event) => {
                 const scrollX = container.value.scrollLeft;
 
@@ -195,30 +207,42 @@
 
                 var hidden_value = 1 - scrollX / 300;
                 if (hidden_value <= 0) {
-                    x_profile.value.style.pointerEvents = "none";
+                    profile_window.value.style.pointerEvents = "none";
                 }
                 else {
-                    x_profile.value.style.pointerEvents = "auto";   // -> m.js:17, changed to "auto"
+                    profile_window.value.style.pointerEvents = "auto";   // -> m.js:17, changed to "auto"
                 }
 
-                x_profile.value.style.opacity = hidden_value;
+                profile_window.value.style.opacity = hidden_value;
             }
 
             var article = ref('');
             var isMainUnActive = reactive({
                 isActive: false,
             });
+            var pageScroll = reactive({
+                isActive: false,
+            })
             const showArticle = (url: string) => {
                 axios.get(url)
 				.then((response) => {
 					article.value = response.data;
                     isMainUnActive.isActive = true;
+                    setTimeout(() => {
+                        pageScroll.isActive = true;
+                    }, 900);
 				})
 				.catch((error) => {
 					console.log("无法拉取到文章 T_T")
 					console.error(error.data)
 				})
             }
+
+            /*
+            const hideArticle = () => {
+                isMainUnActive.isActive = false;
+            }
+            */
 
             return {
                 formState,
@@ -231,13 +255,14 @@
                 activeSearch,
 
                 container,
-                x_profile,
+                profile_window,
 
                 handleScroll,
 
                 article,
                 isMainUnActive,
-                showArticle
+                showArticle,
+                pageScroll
             };
         }
     });
